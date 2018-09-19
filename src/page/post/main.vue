@@ -13,13 +13,13 @@
         <el-row :gutter="20">
           <el-col :span="18">
             <el-tabs v-model="activeKey" type="card" @tab-click="handleClick">
-              <el-tab-pane :label="item.name" :name="item.key" v-for="item in tags" :key="item._id">
+              <el-tab-pane :label="item.name" :name="item._id" v-for="item in tags" :key="item._id">
                 <el-table :data="posts" stripe :show-header="false" style="width: 100%">
                     <el-table-column>
                         <template scope="scope">
                             <span>{{scope.row.comments}}/{{scope.row.views}}</span>
                             <el-tag type="success">{{scope.row.tagName}}</el-tag>
-                            <a v-bind:href="'/postDetail/'+scope.row._id">{{scope.row.title}}</a>
+                            <a class="a_link" @click="goDetail(scope.row._id)">{{scope.row.title}}</a>
                         </template>
                     </el-table-column>
                     <!-- <el-table-column prop="content" width="180">
@@ -56,7 +56,7 @@
         <el-dialog title="添加标签" :visible.sync="dialogVisible" size="tiny">
           <el-input v-model="tag.name" placeholder="请输入标签名称"></el-input>
           <br>
-          <el-input v-model="tag.key" placeholder="请输入标签key"></el-input>
+          <el-input v-model="tag.key" placeholder="请输入标签key(菜单顺序，越小)"></el-input>
           <span slot="footer" class="dialog-footer">
             <el-button @click="resetTag()">取 消</el-button>
             <el-button type="primary" @click="submitTag()">确 定</el-button>
@@ -90,12 +90,19 @@ export default {
   methods: {
     handleClick() {
       this.currentPage = 1;
-      this.getPosts(this.activeKey);
+      let activeId = '';
+      if (this.activeKey !== 'all') {
+        activeId = this.activeKey;
+      } else {
+        activeId = 'all';
+      }
+      this.getPosts(activeId);
     },
     getAllTags() {
       this.$http.get('/api/getAllTags').then((res) => {
         if (res.data.success) {
           this.tags = res.data.data;
+          this.tags.unshift({ name: '全部', _id: 'all' });
         }
       });
     },
@@ -159,6 +166,9 @@ export default {
       };
       this.dialogVisible = false;
     },
+    goDetail(id) {
+      this.$router.push({ name: 'postDetail', params: { postId: id } });
+    },
   },
 };
 </script>
@@ -170,6 +180,10 @@ export default {
 }
 .text-center{
   text-align:center;
+}
+.a_link{
+  color:#20a0ff;
+  cursor: pointer;
 }
 </style>
 

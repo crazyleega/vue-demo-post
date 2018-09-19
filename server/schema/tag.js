@@ -2,28 +2,29 @@ var mongoose = require('../config/db')();
 mongoose.Promise = global.Promise;
 var Schema = mongoose.Schema;
 var TagSchema = new Schema({
-    id:{
-        type:String,
-        index: true
-    },
-	name:{
-		type:String,
-		unique: true,
-        trim: true,
-        required: true,
-        index: true
-    },
-    key:{
-        type:String,
-        required:true,
-    },
+  id:{
+    type:String,
+    index: true
+  },
+  name:{
+    type:String,
+    unique: true,
+    trim: true,
+    required: true,
+    index: true
+  },
+  //权重
+  key:{
+    type:Number,
+    required:true,
+  },
 	status:{
 		type:Number,
-        default: 1
-    },
+    default: 1
+  },
 	createdAt:{
 		type:Date,
-        default: Date.now
+    default: Date.now
 	},
 	updatedAt:{
 		type:Date

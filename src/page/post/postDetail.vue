@@ -48,11 +48,11 @@ export default {
       post: '',
       userId: '',
       comment: '',
-      comments: '',
+      comments: [],
       total: '',
       configs: {
         status: false, // 禁用底部状态栏
-        initialValue: 'Input something...', // 设置初始值
+        placeholder: 'Input something...', // 设置初始值
         renderingConfig: {
           codeSyntaxHighlighting: false, // 开启代码高亮
           highlightingTheme: 'atom-one-light', // 自定义代码高亮主题，可选列表(https://github.com/isagalaev/highlight.js/tree/master/src/styles)
@@ -93,6 +93,7 @@ export default {
         parent_id: this.postId,
         content: this.comment,
         type: 1,
+        createdAt: new Date(),
       };
       this.$http.post('/api/addComment', commentObj).then((res) => {
         if (res.data.success) {
@@ -100,6 +101,8 @@ export default {
             type: 'success',
             message: '发布评论成功',
           });
+          this.comment = '';
+          this.comments.push(commentObj);
         } else {
           this.$message.error('发布评论出错');
         }

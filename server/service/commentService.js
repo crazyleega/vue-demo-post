@@ -21,7 +21,10 @@ const getCommentsByPostId = async (params) => {
             if(error){
                 reject(error);
             }else{
-                for(let i = 0; i < result.length; i++){
+                if(result.length == 0){
+                  resolve(result);
+                }else{
+                  for(let i = 0; i < result.length; i++){
                     (function(j){
                         User.findOne({_id:result[j].from},(error,data) => {
                             if(data){
@@ -32,7 +35,7 @@ const getCommentsByPostId = async (params) => {
                             }
                         })
                     })(i)
-                   
+                  }
                 }
             }
         })

@@ -10,8 +10,7 @@ const getAllPosts = async function(params){
         status: 1,
     }
     if(key !== 'all'){
-        let tag = await Tag.findOne({key:key});
-        queryObj.tags = tag._id;
+        queryObj.tags = key;
     }
     return Post.find(queryObj).skip(skip).limit(pageSize).sort({createdAt:-1});
 }
@@ -22,8 +21,7 @@ const getPostCount = async function(params){
             status: 1,
         }
     if(key !== 'all'){
-        let tag = await Tag.findOne({key:key});
-        queryObj.tags = tag._id;
+        queryObj.tags = key;
     }
     return Post.count(queryObj);
 }
